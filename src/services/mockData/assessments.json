@@ -1,0 +1,150 @@
+[
+  {
+    "Id": 1,
+    "patientId": "P001",
+    "chiefComplaint": "Chest pain and shortness of breath for 2 hours",
+    "symptoms": [
+      {
+        "Id": 1,
+        "name": "Chest Pain",
+        "category": "Cardiovascular",
+        "severity": 4,
+        "notes": "Sharp, substernal pain"
+      },
+      {
+        "Id": 2,
+        "name": "Shortness of Breath",
+        "category": "Respiratory",
+        "severity": 3,
+        "notes": "Worse with exertion"
+      },
+      {
+        "Id": 3,
+        "name": "Nausea",
+        "category": "Gastrointestinal",
+        "severity": 2,
+        "notes": "Mild nausea"
+      }
+    ],
+    "createdAt": "2024-01-15T14:30:00.000Z",
+    "updatedAt": "2024-01-15T14:45:00.000Z",
+    "status": "In Progress"
+  },
+  {
+    "Id": 2,
+    "patientId": "P002",
+    "chiefComplaint": "Severe headache with visual disturbances",
+    "symptoms": [
+      {
+        "Id": 1,
+        "name": "Headache",
+        "category": "Neurological",
+        "severity": 5,
+        "notes": "Throbbing, frontal headache"
+      },
+      {
+        "Id": 2,
+        "name": "Nausea",
+        "category": "Gastrointestinal",
+        "severity": 3,
+        "notes": "Associated with headache"
+      },
+      {
+        "Id": 3,
+        "name": "Dizziness",
+        "category": "Neurological",
+        "severity": 2,
+        "notes": "Mild dizziness"
+      }
+    ],
+    "createdAt": "2024-01-14T09:15:00.000Z",
+    "updatedAt": "2024-01-14T10:30:00.000Z",
+    "status": "Complete"
+  },
+  {
+    "Id": 3,
+    "patientId": "P003",
+    "chiefComplaint": "Abdominal pain and diarrhea for 3 days",
+    "symptoms": [
+      {
+        "Id": 1,
+        "name": "Abdominal Pain",
+        "category": "Gastrointestinal",
+        "severity": 3,
+        "notes": "Cramping pain in lower abdomen"
+      },
+      {
+        "Id": 2,
+        "name": "Diarrhea",
+        "category": "Gastrointestinal",
+        "severity": 4,
+        "notes": "Watery stools, 6-8 times per day"
+      },
+      {
+        "Id": 3,
+        "name": "Fever",
+        "category": "General",
+        "severity": 2,
+        "notes": "Low-grade fever"
+      }
+    ],
+    "createdAt": "2024-01-13T16:20:00.000Z",
+    "updatedAt": "2024-01-13T16:45:00.000Z",
+    "status": "In Progress"
+  },
+  {
+    "Id": 4,
+    "patientId": "P004",
+    "chiefComplaint": "Back pain after lifting heavy objects",
+    "symptoms": [
+      {
+        "Id": 1,
+        "name": "Back Pain",
+        "category": "Musculoskeletal",
+        "severity": 4,
+        "notes": "Sharp pain in lower back"
+      },
+      {
+        "Id": 2,
+        "name": "Muscle Aches",
+        "category": "Musculoskeletal",
+        "severity": 3,
+        "notes": "Muscle spasms in back"
+      }
+    ],
+    "createdAt": "2024-01-12T11:10:00.000Z",
+    "updatedAt": "2024-01-12T11:30:00.000Z",
+    "status": "Complete"
+  },
+  {
+    "Id": 5,
+    "patientId": "P005",
+    "chiefComplaint": "Persistent cough and sore throat",
+    "symptoms": [
+      {
+        "Id": 1,
+        "name": "Cough",
+        "category": "Respiratory",
+        "severity": 3,
+        "notes": "Dry, persistent cough"
+      },
+      {
+        "Id": 2,
+        "name": "Sore Throat",
+        "category": "Respiratory",
+        "severity": 2,
+        "notes": "Mild throat irritation"
+      },
+      {
+        "Id": 3,
+        "name": "Fatigue",
+        "category": "General",
+        "severity": 2,
+        "notes": "Mild fatigue"
+      }
+    ],
+    "createdAt": "2024-01-11T08:45:00.000Z",
+    "updatedAt": "2024-01-11T09:15:00.000Z",
+    "status": "Draft"
+  }
+]
