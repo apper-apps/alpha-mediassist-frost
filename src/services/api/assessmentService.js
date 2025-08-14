@@ -19,11 +19,22 @@ class AssessmentService {
     return { ...assessment };
   }
 
-  async create(assessmentData) {
+async create(assessmentData) {
     await this.delay(400);
     const newId = Math.max(...this.assessments.map(a => a.Id)) + 1;
+    
+    // Ensure symptoms have proper structure with duration and onset
+    const processedSymptoms = assessmentData.symptoms?.map(symptom => ({
+      ...symptom,
+      duration: symptom.duration || "",
+      durationUnit: symptom.durationUnit || "days",
+      onset: symptom.onset || "",
+      notes: symptom.notes || ""
+    })) || [];
+    
     const newAssessment = {
       ...assessmentData,
+      symptoms: processedSymptoms,
       Id: newId,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -32,16 +43,26 @@ class AssessmentService {
     return { ...newAssessment };
   }
 
-  async update(id, assessmentData) {
+async update(id, assessmentData) {
     await this.delay(350);
     const index = this.assessments.findIndex(a => a.Id === id);
     if (index === -1) {
       throw new Error("Assessment not found");
     }
     
+    // Ensure symptoms have proper structure with duration and onset
+    const processedSymptoms = assessmentData.symptoms?.map(symptom => ({
+      ...symptom,
+      duration: symptom.duration || "",
+      durationUnit: symptom.durationUnit || "days",
+      onset: symptom.onset || "",
+      notes: symptom.notes || ""
+    })) || [];
+    
     this.assessments[index] = {
       ...this.assessments[index],
       ...assessmentData,
+      symptoms: processedSymptoms,
       Id: id,
       updatedAt: new Date().toISOString()
     };

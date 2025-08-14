@@ -15,16 +15,41 @@ const AssessmentForm = () => {
   const { id } = useParams();
   const isEditing = Boolean(id);
 
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     patientId: "",
     chiefComplaint: "",
     symptoms: []
   });
+  
+  const [expandedCategories, setExpandedCategories] = useState({
+    "Cardiovascular": true,
+    "Respiratory": true,
+    "Gastrointestinal": true,
+    "Neurological": true,
+    "Musculoskeletal": true,
+    "Dermatological": true,
+    "General": true,
+    "Psychological": true
+  });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [saving, setSaving] = useState(false);
+const [saving, setSaving] = useState(false);
 
+  const durationOptions = [
+    { value: "minutes", label: "Minutes" },
+    { value: "hours", label: "Hours" },
+    { value: "days", label: "Days" },
+    { value: "weeks", label: "Weeks" },
+    { value: "months", label: "Months" }
+  ];
+
+  const onsetOptions = [
+    { value: "sudden", label: "Sudden onset" },
+    { value: "gradual", label: "Gradual onset" },
+    { value: "intermittent", label: "Intermittent" },
+    { value: "constant", label: "Constant" }
+  ];
   const commonSymptoms = [
     { name: "Fever", category: "General" },
     { name: "Headache", category: "Neurological" },
@@ -70,11 +95,14 @@ const AssessmentForm = () => {
   };
 
   const initializeSymptoms = () => {
-    const symptoms = commonSymptoms.map((symptom, index) => ({
+const symptoms = commonSymptoms.map((symptom, index) => ({
       Id: index + 1,
       name: symptom.name,
       category: symptom.category,
       severity: 0,
+      duration: "",
+      durationUnit: "days",
+      onset: "",
       notes: ""
     }));
     
@@ -91,6 +119,21 @@ const AssessmentForm = () => {
       symptoms: prev.symptoms.map(symptom =>
         symptom.Id === symptomId ? { ...symptom, severity } : symptom
       )
+    }));
+  };
+const handleSymptomChange = (symptomId, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      symptoms: prev.symptoms.map(symptom =>
+        symptom.Id === symptomId ? { ...symptom, [field]: value } : symptom
+      )
+    }));
+  };
+
+  const toggleCategory = (category) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
     }));
   };
 
@@ -188,27 +231,102 @@ const AssessmentForm = () => {
             Rate the severity of each symptom on a scale of 0-5 (0 = None, 5 = Critical)
           </p>
 
-          {Object.entries(groupedSymptoms).map(([category, symptoms]) => (
-            <div key={category} className="space-y-4">
-              <h4 className="text-md font-medium text-surface-800 bg-surface-50 px-4 py-2 rounded-lg">
-                {category}
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-4">
-                {symptoms.map((symptom, index) => {
-                  const symptomData = formData.symptoms.find(s => s.name === symptom.name);
-                  const symptomId = commonSymptoms.findIndex(s => s.name === symptom.name) + 1;
-                  
-                  return (
-                    <SeveritySlider
-                      key={symptom.name}
-                      symptomName={symptom.name}
-                      value={symptomData?.severity || 0}
-                      onChange={(severity) => handleSymptomSeverityChange(symptomId, severity)}
-                    />
-                  );
-                })}
+{Object.entries(groupedSymptoms).map(([category, symptoms]) => {
+            const isExpanded = expandedCategories[category];
+            return (
+              <div key={category} className="space-y-4 border border-surface-200 rounded-lg">
+                <button
+                  type="button"
+                  onClick={() => toggleCategory(category)}
+                  className="w-full text-left px-4 py-3 bg-surface-50 hover:bg-surface-100 rounded-t-lg flex items-center justify-between transition-colors"
+                >
+                  <h4 className="text-md font-medium text-surface-800">
+                    {category} ({symptoms.length} symptoms)
+                  </h4>
+                  <ApperIcon 
+                    name={isExpanded ? "ChevronUp" : "ChevronDown"} 
+                    size={16} 
+                    className="text-surface-600" 
+                  />
+                </button>
+                
+                {isExpanded && (
+                  <div className="p-4 space-y-6">
+                    {symptoms.map((symptom) => {
+                      const symptomData = formData.symptoms.find(s => s.name === symptom.name);
+                      const symptomId = commonSymptoms.findIndex(s => s.name === symptom.name) + 1;
+                      
+                      return (
+                        <div key={symptom.name} className="space-y-4 p-4 bg-surface-50 rounded-lg">
+                          <SeveritySlider
+                            symptomName={symptom.name}
+                            value={symptomData?.severity || 0}
+                            onChange={(severity) => handleSymptomSeverityChange(symptomId, severity)}
+                          />
+                          
+                          {(symptomData?.severity || 0) > 0 && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                              <div className="space-y-2">
+                                <label className="text-xs font-medium text-surface-700">Duration</label>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    placeholder="Duration"
+                                    value={symptomData?.duration || ""}
+                                    onChange={(e) => handleSymptomChange(symptomId, "duration", e.target.value)}
+                                    className="flex-1 px-3 py-2 text-sm border border-surface-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                  />
+                                  <select
+                                    value={symptomData?.durationUnit || "days"}
+                                    onChange={(e) => handleSymptomChange(symptomId, "durationUnit", e.target.value)}
+                                    className="px-3 py-2 text-sm border border-surface-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                  >
+                                    {durationOptions.map(option => (
+                                      <option key={option.value} value={option.value}>
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <label className="text-xs font-medium text-surface-700">Onset</label>
+                                <select
+                                  value={symptomData?.onset || ""}
+                                  onChange={(e) => handleSymptomChange(symptomId, "onset", e.target.value)}
+                                  className="w-full px-3 py-2 text-sm border border-surface-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                >
+                                  <option value="">Select onset type</option>
+                                  {onsetOptions.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                      {option.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              
+                              <div className="md:col-span-2 space-y-2">
+                                <label className="text-xs font-medium text-surface-700">Additional Notes</label>
+                                <textarea
+                                  placeholder="Any additional details about this symptom..."
+                                  value={symptomData?.notes || ""}
+                                  onChange={(e) => handleSymptomChange(symptomId, "notes", e.target.value)}
+                                  rows={2}
+                                  className="w-full px-3 py-2 text-sm border border-surface-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
+            );
+          })}
           ))}
         </div>
 
