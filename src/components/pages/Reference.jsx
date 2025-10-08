@@ -41,8 +41,8 @@ const Reference = () => {
 
     if (searchQuery) {
       filtered = filtered.filter(reference =>
-        reference.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        reference.description.toLowerCase().includes(searchQuery.toLowerCase())
+reference.title_c.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reference.description_c.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -53,7 +53,7 @@ const Reference = () => {
     setFilteredReferences(filtered);
   };
 
-  const types = ["All", ...new Set(references.map(r => r.type))];
+const types = ["All", ...new Set(references.map(r => r.type_c))];
 
   if (loading) return <Loading variant="list" />;
   if (error) return <Error message={error} onRetry={loadReferences} />;
@@ -107,7 +107,7 @@ const Reference = () => {
               <div>
                 <p className="text-sm font-medium text-primary-900">Calculators</p>
                 <p className="text-2xl font-bold text-primary-900">
-                  {references.filter(r => r.type === "Calculator").length}
+{references.filter(r => r.type_c === "Calculator").length}
                 </p>
               </div>
             </div>
@@ -121,7 +121,7 @@ const Reference = () => {
               <div>
                 <p className="text-sm font-medium text-accent-900">Drug Reference</p>
                 <p className="text-2xl font-bold text-accent-900">
-                  {references.filter(r => r.type === "Drug Reference").length}
+{references.filter(r => r.type_c === "Drug Reference").length}
                 </p>
               </div>
             </div>
@@ -135,7 +135,7 @@ const Reference = () => {
               <div>
                 <p className="text-sm font-medium text-secondary-900">Guidelines</p>
                 <p className="text-2xl font-bold text-secondary-900">
-                  {references.filter(r => r.type === "Guidelines").length}
+{references.filter(r => r.type_c === "Guidelines").length}
                 </p>
               </div>
             </div>
@@ -149,7 +149,7 @@ const Reference = () => {
               <div>
                 <p className="text-sm font-medium text-yellow-900">Diagnostic Tools</p>
                 <p className="text-2xl font-bold text-yellow-900">
-                  {references.filter(r => r.type === "Diagnostic Tool").length}
+{references.filter(r => r.type_c === "Diagnostic Tool").length}
                 </p>
               </div>
             </div>

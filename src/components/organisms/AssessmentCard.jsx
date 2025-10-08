@@ -48,8 +48,8 @@ const AssessmentCard = ({ assessment, onDelete }) => {
     }
   };
 
-  const severityCount = getSeverityCount(assessment.symptoms || []);
-  const totalSymptoms = assessment.symptoms?.filter(s => s.severity > 0).length || 0;
+  const severityCount = getSeverityCount(assessment.symptoms_c || []);
+  const totalSymptoms = assessment.symptoms_c?.filter(s => s.severity > 0).length || 0;
 
   return (
     <Card className="p-6 hover:shadow-lg transition-all duration-200">
@@ -57,17 +57,17 @@ const AssessmentCard = ({ assessment, onDelete }) => {
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
             <h3 className="text-lg font-semibold text-surface-900">
-              Patient ID: {assessment.patientId}
+              Patient ID: {assessment.patient_id_c}
             </h3>
-            <Badge variant={getStatusVariant(assessment.status)}>
-              {assessment.status}
+            <Badge variant={getStatusVariant(assessment.status_c)}>
+              {assessment.status_c}
             </Badge>
           </div>
           <p className="text-surface-700 font-medium mb-1">
-            {assessment.chiefComplaint}
+            {assessment.chief_complaint_c}
           </p>
           <p className="text-sm text-surface-500">
-            Created: {format(new Date(assessment.createdAt), "MMM d, yyyy 'at' h:mm a")}
+            Created: {format(new Date(assessment.created_at_c), "MMM d, yyyy 'at' h:mm a")}
           </p>
         </div>
         

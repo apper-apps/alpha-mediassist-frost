@@ -43,14 +43,14 @@ const Assessments = () => {
     let filtered = assessments;
 
     if (searchQuery) {
-      filtered = filtered.filter(assessment =>
-        assessment.patientId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        assessment.chiefComplaint.toLowerCase().includes(searchQuery.toLowerCase())
+filtered = filtered.filter(assessment =>
+        assessment.patient_id_c.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        assessment.chief_complaint_c.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (statusFilter !== "All") {
-      filtered = filtered.filter(assessment => assessment.status === statusFilter);
+filtered = filtered.filter(assessment => assessment.status_c === statusFilter);
     }
 
     setFilteredAssessments(filtered);
@@ -129,7 +129,7 @@ const Assessments = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-surface-600">In Progress</p>
                 <p className="text-2xl font-bold text-surface-900">
-                  {assessments.filter(a => a.status === "In Progress").length}
+{assessments.filter(a => a.status_c === "In Progress").length}
                 </p>
               </div>
             </div>
@@ -142,7 +142,7 @@ const Assessments = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-surface-600">Complete</p>
                 <p className="text-2xl font-bold text-surface-900">
-                  {assessments.filter(a => a.status === "Complete").length}
+{assessments.filter(a => a.status_c === "Complete").length}
                 </p>
               </div>
             </div>

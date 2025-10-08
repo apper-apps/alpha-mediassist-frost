@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { cn } from "@/utils/cn";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import { cn } from "@/utils/cn";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigation = [
@@ -105,7 +106,23 @@ const Sidebar = ({ isOpen, onClose }) => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-surface-200">
+<div className="p-4 border-t border-surface-200">
+        <Button 
+          variant="ghost" 
+          className="w-full mb-3 justify-start"
+          onClick={async () => {
+            try {
+              const { ApperUI } = window.ApperSDK;
+              await ApperUI.logout();
+              window.location.href = '/login';
+            } catch (error) {
+              console.error("Logout failed:", error);
+            }
+          }}
+        >
+          <ApperIcon name="LogOut" className="h-5 w-5 mr-2" />
+          Logout
+        </Button>
         <div className="flex items-center space-x-3 p-3 rounded-lg bg-surface-50">
           <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
             <ApperIcon name="User" className="h-5 w-5 text-primary-600" />

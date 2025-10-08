@@ -22,18 +22,18 @@ const ProtocolCard = ({ protocol }) => {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
-            <h3 className="text-lg font-semibold text-surface-900">
-              {protocol.title}
+<h3 className="text-lg font-semibold text-surface-900">
+              {protocol.title_c}
             </h3>
-            <Badge variant={getCategoryVariant(protocol.category)}>
-              {protocol.category}
+            <Badge variant={getCategoryVariant(protocol.category_c)}>
+              {protocol.category_c}
             </Badge>
           </div>
-          <p className="text-surface-600 text-sm line-clamp-2 mb-3">
-            {protocol.content.substring(0, 150)}...
+<p className="text-surface-600 text-sm line-clamp-2 mb-3">
+            {protocol.content_c.substring(0, 150)}...
           </p>
           <p className="text-xs text-surface-500">
-            Last updated: {format(new Date(protocol.lastUpdated), "MMM d, yyyy")}
+            Last updated: {format(new Date(protocol.last_updated_c), "MMM d, yyyy")}
           </p>
         </div>
       </div>

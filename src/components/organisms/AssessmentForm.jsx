@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import SeveritySlider from "@/components/molecules/SeveritySlider";
+import FormField from "@/components/molecules/FormField";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
-import FormField from "@/components/molecules/FormField";
-import SeveritySlider from "@/components/molecules/SeveritySlider";
-import ApperIcon from "@/components/ApperIcon";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
 import assessmentService from "@/services/api/assessmentService";
-import { toast } from "react-toastify";
 
 const AssessmentForm = () => {
   const navigate = useNavigate();
@@ -16,9 +16,9 @@ const AssessmentForm = () => {
   const isEditing = Boolean(id);
 
 const [formData, setFormData] = useState({
-    patientId: "",
-    chiefComplaint: "",
-    symptoms: []
+    patient_id_c: "",
+    chief_complaint_c: "",
+    symptoms_c: []
   });
   
   const [expandedCategories, setExpandedCategories] = useState({
@@ -85,8 +85,12 @@ const [saving, setSaving] = useState(false);
     try {
       setLoading(true);
       setError(null);
-      const assessment = await assessmentService.getById(parseInt(id));
-      setFormData(assessment);
+const assessment = await assessmentService.getById(parseInt(id));
+      setFormData({
+        patient_id_c: assessment.patient_id_c,
+        chief_complaint_c: assessment.chief_complaint_c,
+        symptoms_c: assessment.symptoms_c
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -103,10 +107,10 @@ const symptoms = commonSymptoms.map((symptom, index) => ({
       duration: "",
       durationUnit: "days",
       onset: "",
-      notes: ""
+notes: ""
     }));
     
-    setFormData(prev => ({ ...prev, symptoms }));
+    setFormData(prev => ({ ...prev, symptoms_c: symptoms }));
   };
 
   const handleInputChange = (field, value) => {
@@ -116,19 +120,19 @@ const symptoms = commonSymptoms.map((symptom, index) => ({
   const handleSymptomSeverityChange = (symptomId, severity) => {
     setFormData(prev => ({
       ...prev,
-      symptoms: prev.symptoms.map(symptom =>
+symptoms_c: prev.symptoms_c.map(symptom =>
         symptom.Id === symptomId ? { ...symptom, severity } : symptom
       )
     }));
   };
 const handleSymptomChange = (symptomId, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      symptoms: prev.symptoms.map(symptom =>
-        symptom.Id === symptomId ? { ...symptom, [field]: value } : symptom
-      )
-    }));
-  };
+  setFormData(prev => ({
+    ...prev,
+    symptoms_c: prev.symptoms_c.map(symptom =>
+      symptom.Id === symptomId ? { ...symptom, [field]: value } : symptom
+    )
+  }));
+};
 
   const toggleCategory = (category) => {
     setExpandedCategories(prev => ({
@@ -137,21 +141,23 @@ const handleSymptomChange = (symptomId, field, value) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.patientId.trim() || !formData.chiefComplaint.trim()) {
+    if (!formData.patient_id_c?.trim() || !formData.chief_complaint_c?.trim()) {
       toast.error("Please fill in all required fields");
       return;
     }
-
     try {
       setSaving(true);
       
       const assessmentData = {
-        ...formData,
-        status: formData.symptoms.some(s => s.severity > 0) ? "In Progress" : "Draft",
-        updatedAt: new Date().toISOString()
+Name: formData.patient_id_c || `Assessment ${Date.now()}`,
+        patient_id_c: formData.patient_id_c,
+        chief_complaint_c: formData.chief_complaint_c,
+        symptoms_c: formData.symptoms_c,
+        status_c: formData.symptoms_c.some(s => s.severity > 0) ? "In Progress" : "Draft",
+        updated_at_c: new Date().toISOString()
       };
 
       if (isEditing) {
@@ -207,17 +213,17 @@ const handleSymptomChange = (symptomId, field, value) => {
             <FormField
               label="Patient ID"
               required
-              value={formData.patientId}
-              onChange={(e) => handleInputChange("patientId", e.target.value)}
+value={formData.patient_id_c}
+              onChange={(e) => handleInputChange("patient_id_c", e.target.value)}
               placeholder="Enter patient ID"
             />
           </div>
 
-          <FormField
+<FormField
             label="Chief Complaint"
             required
-            value={formData.chiefComplaint}
-            onChange={(e) => handleInputChange("chiefComplaint", e.target.value)}
+            value={formData.chief_complaint_c}
+            onChange={(e) => handleInputChange("chief_complaint_c", e.target.value)}
             placeholder="Describe the patient's primary concern"
           />
         </div>
@@ -253,9 +259,8 @@ const handleSymptomChange = (symptomId, field, value) => {
                 {isExpanded && (
                   <div className="p-4 space-y-6">
                     {symptoms.map((symptom) => {
-                      const symptomData = formData.symptoms.find(s => s.name === symptom.name);
+const symptomData = formData.symptoms_c.find(s => s.name === symptom.name);
                       const symptomId = commonSymptoms.findIndex(s => s.name === symptom.name) + 1;
-                      
                       return (
                         <div key={symptom.name} className="space-y-4 p-4 bg-surface-50 rounded-lg">
                           <SeveritySlider

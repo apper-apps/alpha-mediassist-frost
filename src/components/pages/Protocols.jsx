@@ -41,8 +41,8 @@ const Protocols = () => {
 
     if (searchQuery) {
       filtered = filtered.filter(protocol =>
-        protocol.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        protocol.content.toLowerCase().includes(searchQuery.toLowerCase())
+protocol.title_c.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        protocol.content_c.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -53,7 +53,7 @@ const Protocols = () => {
     setFilteredProtocols(filtered);
   };
 
-  const categories = ["All", ...new Set(protocols.map(p => p.category))];
+const categories = ["All", ...new Set(protocols.map(p => p.category_c))];
 
   if (loading) return <Loading variant="list" />;
   if (error) return <Error message={error} onRetry={loadProtocols} />;
@@ -100,7 +100,7 @@ const Protocols = () => {
       {protocols.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {categories.slice(1).map(category => {
-            const count = protocols.filter(p => p.category === category).length;
+const count = protocols.filter(p => p.category_c === category).length;
             return (
               <div key={category} className="bg-white p-4 rounded-lg border border-surface-200">
                 <div className="text-center">
